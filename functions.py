@@ -75,9 +75,9 @@ def run_example(image, text_input, system_prompt, model_id="Qwen/Qwen2-VL-2B-Ins
         **inputs, 
         max_new_tokens=512, 
         #do_sample=True,  # Enable sampling
-        temperature=0.6,  # Adjust temperature for randomness
-        #top_k=50,         # Use top-k sampling
-        #top_p=0.95,        # Use top-p (nucleus) sampling
+        temperature=0.6,  # temperature for randomness
+        #top_k=50,         # top-k sampling
+        #top_p=0.95,        # top-p (nucleus) sampling
     )
     #Took: 4 min for 512, 7:15 min for 1024 tokens
     generated_ids_trimmed = [

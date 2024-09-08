@@ -30,10 +30,6 @@ def process_image():
     #         continue
     #     file_size_kb = file_size / 1024
 
-    # # Load and encode the image in base64
-    # with open(image.replace('file:///', ''), 'rb') as image_file:
-    #     image_data = base64.b64encode(image_file.read()).decode('utf-8')
-
     # decoding the base64 image
     image_data = base64.b64decode(image)
 
@@ -57,15 +53,28 @@ def process_image():
 
     model_id = data.get('model_id', 'Qwen/Qwen2-VL-2B-Instruct-AWQ', )
 
-    # Decode image from base64
-    #image_data = Image.open(BytesIO(base64.b64decode(image)))
-
-    output_text = run_example(
-        image_data_base64, text_input, system_prompt, model_id #image_data
-    )
+    # Initial prompt to the model
+    initial_output = run_example(image_data_base64, text_input, system_prompt, model_id)
+    
+    refined_output = initial_output
+    for _ in range(1): 
+        refinement_prompt = f"""
+        Refine the following test cases instructions.
+          Ensure they are specific, comprehensive, and cover all aspects of the features shown in the image and described in the text input.
+          Mention the Feature name with the Test Case ID.
+          
+        
+        Test cases instructions:
+        {refined_output}
+        """
+        #Do not remove anything. Only add and keep the previous content.
+        #Below are the test cases instructions provided, please refine them further.
+        #Add to the existing test case instructions only, especially the Description.
+        refined_output = run_example(image_data_base64, text_input, refinement_prompt, model_id)
+    
 
     return jsonify({
-        "output_text": output_text
+        "output_text": refined_output
     })
 
 

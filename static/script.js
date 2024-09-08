@@ -55,8 +55,11 @@ document.getElementById('describeBtn').addEventListener('click', async () => {
     
       lines.forEach(line => {  
         const paragraph = document.createElement('p');  
-        paragraph.innerText = line;  
-        sectionDiv.appendChild(paragraph);  
+        //paragraph.innerText = line;  
+        // replacing '**' with <strong> tags for bold text
+        const formattedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        paragraph.innerHTML = formattedLine; 
+        sectionDiv.appendChild(paragraph);
       });  
     
       container.appendChild(sectionDiv);  
