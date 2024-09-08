@@ -1,0 +1,28 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>Test Case Instructor</title>  
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>  
+<body>  
+  <header>  
+   <h1>Generate Testing Instructions</h1>  
+  </header>  
+  <main>  
+   <section>  
+    <h2>Optional Context:</h2>  
+    <textarea id="context" rows="4" cols="50" placeholder="Enter any optional context here..."></textarea>  
+   </section>  
+   <section>  
+    <h2>Upload Screenshots (required):</h2>  
+    <input type="file" id="images" accept="image/*" multiple required>  
+   </section>  
+   <button id="describeBtn">Describe Testing Instructions</button>  
+   <div id="output"></div>  
+  </main>  
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>  
+</html>

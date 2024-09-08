@@ -1,0 +1,13 @@
+numpy==1.24.4
+Pillow==10.4.0
+flask=3.0.3
+Requests==2.31.0
+accelerate==0.30.0
+qwen-vl-utils==0.0.4
+#autoawq==0.2.6
+
+git+https://github.com/huggingface/transformers.git@main 
+#for: transformers==4.45.0.dev0
+
+#Run: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+#for: torch==2.4.1+cu124 , torchvision==0.19.1

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Instructions Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            max-width: 800px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Generate Testing Instructions</h1>
+    
+    <label for="context">Optional Context:</label>
+    <textarea id="context" rows="4" cols="50" placeholder="Enter any optional context here..."></textarea>
+    
+    <br><br>
+    
+    <label for="images">Upload Screenshots (required):</label>
+    <input type="file" id="images" accept="image/*" multiple required>
+    
+    <br><br>
+    
+    <button id="describeBtn">Describe Testing Instructions</button>
+    
+    <br><br>
+
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('describeBtn').addEventListener('click', async () => {
+            const context = document.getElementById('context').value;
+            const imagesInput = document.getElementById('images');
+            const files = imagesInput.files;
+            if (files.length === 0) {
+                alert('Please upload at least one screenshot.');
+                return;
+            }
+            const imagesBase64 = await Promise.all([...files].map(file => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]); 
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            }));
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = '<p>Processing... Please wait.</p>';
+            try {
+                const response = await fetch('/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        image: imagesBase64[0], // Sending only the first image for simplicity
+                        text_input: context
+                    })
+                });
+
+                const data = await response.json();
+                outputDiv.innerHTML = '';
+                displayOutput(data.output_text, outputDiv);
+            } catch (error) {
+                console.error('Error:', error);
+                outputDiv.innerHTML = '<p>An error occurred while processing your request. Please try again.</p>';
+            }
+        });
+
+        function displayOutput(outputTextArray, container) {
+            outputTextArray.forEach(outputText => {
+                const sections = outputText.split('\n\n');
+
+                sections.forEach(section => {
+                    const sectionDiv = document.createElement('div');
+                    const lines = section.split('\n');
+                    
+                    lines.forEach(line => {
+                        const paragraph = document.createElement('p');
+                        paragraph.innerText = line;
+                        sectionDiv.appendChild(paragraph);
+                    });
+
+                    container.appendChild(sectionDiv);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

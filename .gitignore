@@ -1,0 +1,16 @@
+# Python specific
+*.pyc
+__pycache__/
+
+# IDE or editor specific
+.vscode/
+.vs/
+
+# Python virtual environments
+ve/
+
+# Configuration files containing sensitive information
+config.py
+.env
+
+todo.txt
